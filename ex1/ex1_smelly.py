@@ -1,39 +1,51 @@
 class OrderProcessor:
-    def process_order(self, order):
-        # Step 1: Validate order details
+    
+    def check_order(self, order):
         if not order.get("customer_id"):
             raise ValueError("Customer ID is required.")
         if not order.get("items"):
             raise ValueError("Order must contain items.")
-
-        # Step 2: Calculate total price
+    
+        return True
+    
+    def calculate_discount(self, order):
+        if order.get("discount_code") == "SUMMER20":
+            discount = 0.8
+        elif order.get("discount_code") == "WELCOME10":
+            discount = 0.9
+    
+    def calculate_total_price(self, order, discount):
         total_price = 0
         for item in order["items"]:
             total_price += item["price"] * item["quantity"]
-
-        # Step 3: Apply discounts if applicable
-        if order.get("discount_code") == "SUMMER20":
-            total_price *= 0.8  # 20% discount
-        elif order.get("discount_code") == "WELCOME10":
-            total_price *= 0.9  # 10% discount
-
-        # Step 4: Update inventory
+        
+        total_price *= discount
+        return total_price
+    
+    
+    def update_inventory(self, order):
         for item in order["items"]:
             item_id = item["id"]
             quantity = item["quantity"]
-            # Code to update inventory for each item
-            # (for simplicity, let's assume a simple print statement here)
             print(f"Updating inventory for item {item_id}, reducing stock by {quantity}.")
-
-        # Step 5: Generate receipt
+    
+    def generate_receipt(self, order, total_price):
         receipt = f"Customer ID: {order['customer_id']}\n"
         receipt += "Items:\n"
         for item in order["items"]:
             receipt += f"- {item['name']}: {item['quantity']} x ${item['price']}\n"
         receipt += f"Total: ${total_price:.2f}\n"
-
-        # Step 6: Send confirmation email
+        
         print(f"Sending email to customer {order['customer_id']} with receipt:\n{receipt}")
 
         return receipt
-
+    
+    
+    def process_order(self, order):
+        self.check_order(order)
+        discount = self.calculate_discount(order)
+        total_price = self.calculate_total_price(order, discount)
+        self.update_inventory(order)
+        receipt = self.generate_receipt(order, total_price)
+        
+        return receipt
