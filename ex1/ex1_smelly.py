@@ -40,6 +40,7 @@ class OrderProcessor:
 
         return receipt
     
+    #helper function
     
     def process_order(self, order):
         self.check_order(order)
