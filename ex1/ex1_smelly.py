@@ -15,6 +15,7 @@ class OrderProcessor:
             discount = 0.9
         else:
             discount = 1
+        return discount
     
     def calculate_total_price(self, order, discount):
         total_price = 0
