@@ -13,6 +13,8 @@ class OrderProcessor:
             discount = 0.8
         elif order.get("discount_code") == "WELCOME10":
             discount = 0.9
+        else:
+            discount = 1
     
     def calculate_total_price(self, order, discount):
         total_price = 0
